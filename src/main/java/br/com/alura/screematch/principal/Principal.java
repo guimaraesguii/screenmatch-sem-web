@@ -6,10 +6,11 @@ import br.com.alura.screematch.model.DadosTemporada;
 import br.com.alura.screematch.service.ConsumoAPI;
 import br.com.alura.screematch.service.ConverteDados;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Principal {
 
