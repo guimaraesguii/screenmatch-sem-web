@@ -3,13 +3,11 @@ package br.com.alura.screematch.principal;
 import br.com.alura.screematch.model.DadosEpisodio;
 import br.com.alura.screematch.model.DadosSerie;
 import br.com.alura.screematch.model.DadosTemporada;
+import br.com.alura.screematch.model.Episodio;
 import br.com.alura.screematch.service.ConsumoAPI;
 import br.com.alura.screematch.service.ConverteDados;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -45,26 +43,37 @@ public class Principal {
                 .flatMap(t -> t.episodios().stream())
                 .collect(Collectors.toList());
 
-        System.out.println("Top 10 episodios: ");
-
-        dadosEpisodios.stream().filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
-                .peek(e -> System.out.println("Primeiro filtro: (N/A) " + e ))
-                .sorted(Comparator.comparing(DadosEpisodio ::avaliacao).reversed())
-                .peek(e -> System.out.println("Ordenando por avaliação: " + e ))
-                .limit(10)
-                .peek(e -> System.out.println("Limite: " + e ))
-                .map(e -> e.titulo().toUpperCase())
-                .peek(e -> System.out.println("Mapeamento: " + e ))
-
-                .forEach(System.out::println);
-
-//        List<Episodio> episodios = temporadas.stream()
-//                .flatMap(t -> t.episodios().stream()
-//                        .map(d -> new Episodio(t.numero(), d))
-//                ).collect(Collectors.toList());
+//        System.out.println("Top 10 episodios: ");
 //
-//        episodios.forEach(System.out::println);
+//        dadosEpisodios.stream().filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+//                .peek(e -> System.out.println("Primeiro filtro: (N/A) " + e ))
+//                .sorted(Comparator.comparing(DadosEpisodio ::avaliacao).reversed())
+//                .peek(e -> System.out.println("Ordenando por avaliação: " + e ))
+//                .limit(10)
+//                .peek(e -> System.out.println("Limite: " + e ))
+//                .map(e -> e.titulo().toUpperCase())
+//                .peek(e -> System.out.println("Mapeamento: " + e ))
 //
+//                .forEach(System.out::println);
+
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(d -> new Episodio(t.numero(), d))
+                ).collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
+
+        System.out.println("Digite o nome do episodio: ");
+        var trechoDoTitulo = leitura.nextLine();
+        Optional<Episodio> episodioBuscavel = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoDoTitulo.toUpperCase()))
+                .findFirst();
+        if(episodioBuscavel.isPresent()){
+            System.out.println("Episodio encontrado!");
+            System.out.println("Temporada: " + episodioBuscavel.get().getTemporada());
+        }else {
+            System.out.println("Episódio não encontrado");
+        }
 //        System.out.println("A partir de qual ano você deseja ver os episodios? ");
 //        var ano = leitura.nextInt();
 //        leitura.nextLine();
