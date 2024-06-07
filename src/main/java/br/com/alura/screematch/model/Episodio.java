@@ -27,6 +27,11 @@ public class Episodio {
         }catch (DateTimeException ex){
             this.dataDeLancamento = null;
         }
+        try {
+            this.numero = Integer.valueOf(dadosEpisodio.numero());
+        }catch (NullPointerException ex){
+            this.numero = 0;
+        }
     }
 
 
