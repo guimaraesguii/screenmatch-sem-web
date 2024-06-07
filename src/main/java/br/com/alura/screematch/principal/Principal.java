@@ -1,9 +1,6 @@
 package br.com.alura.screematch.principal;
 
-import br.com.alura.screematch.model.DadosEpisodio;
-import br.com.alura.screematch.model.DadosSerie;
-import br.com.alura.screematch.model.DadosTemporada;
-import br.com.alura.screematch.model.Episodio;
+import br.com.alura.screematch.model.*;
 import br.com.alura.screematch.service.ConsumoAPI;
 import br.com.alura.screematch.service.ConverteDados;
 
@@ -27,13 +24,14 @@ public class Principal {
         System.out.println("Digite o nome da série que você deseja buscar: ");
         var nomeSerie = leitura.nextLine();
         var json = consumoAPI.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-        System.out.println(dados);
+           DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
+           System.out.println(dados);
 
         List<DadosTemporada> temporadas = new ArrayList<>();
 
         for (int i = 1; i <= dados.totalTemporadas(); i++) {
             json = consumoAPI.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + "&season=" + i + API_KEY);
+
             DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
             temporadas.add(dadosTemporada);
         }
@@ -72,32 +70,32 @@ public class Principal {
 
         episodios.forEach(System.out::println);
 
-//        System.out.println("Digite o nome do episodio: ");
-//        var trechoDoTitulo = leitura.nextLine();
-//        Optional<Episodio> episodioBuscavel = episodios.stream()
-//                .filter(e -> e.getTitulo().toUpperCase().contains(trechoDoTitulo.toUpperCase()))
-//                .findFirst();
-//        if(episodioBuscavel.isPresent()){
-//            System.out.println("Episodio encontrado!");
-//            System.out.println("Temporada: " + episodioBuscavel.get().getTemporada());
-//        }else {
-//            System.out.println("Episódio não encontrado");
-//        }
-//        System.out.println("A partir de qual ano você deseja ver os episodios? ");
-//        var ano = leitura.nextInt();
-//        leitura.nextLine();
-//
-//        LocalDate dataBusca = LocalDate.of(ano,1,1);
-//
-//        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//
-//        episodios.stream()
-//                .filter(e -> e.getDataDeLancamento() != null && e.getDataDeLancamento().isAfter(dataBusca))
-//                .forEach(e -> System.out.println(
-//                        "Temporada: " + e.getTemporada() +
-//                                "Episódio: " + e.getTitulo() +
-//                                "Data de lançamento: " + e.getDataDeLancamento().format(formatador)
-//                ));
+        System.out.println("Digite o nome do episodio: ");
+        var trechoDoTitulo = leitura.nextLine();
+        Optional<Episodio> episodioBuscavel = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoDoTitulo.toUpperCase()))
+                .findFirst();
+        if(episodioBuscavel.isPresent()){
+            System.out.println("Episodio encontrado!");
+            System.out.println("Temporada: " + episodioBuscavel.get().getTemporada());
+        }else {
+            System.out.println("Episódio não encontrado");
+        }
+        System.out.println("A partir de qual ano você deseja ver os episodios? ");
+        var ano = leitura.nextInt();
+        leitura.nextLine();
+
+        LocalDate dataBusca = LocalDate.of(ano,1,1);
+
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        episodios.stream()
+                .filter(e -> e.getDataDeLancamento() != null && e.getDataDeLancamento().isAfter(dataBusca))
+                .forEach(e -> System.out.println(
+                        "Temporada: " + e.getTemporada() +
+                                "Episódio: " + e.getTitulo() +
+                                "Data de lançamento: " + e.getDataDeLancamento().format(formatador)
+                ));
 
         Map<Integer, Double> avaliacaoTemporada = episodios.stream()
                 .filter(e -> e.getAvaliacao() > 0.0)
@@ -107,7 +105,7 @@ public class Principal {
         System.out.println(avaliacaoTemporada);
 
         DoubleSummaryStatistics est = episodios.stream()
-                .filter(e -> e.getAvaliacao() >0.0)
+                .filter(e -> e.getAvaliacao() > 0.0)
                 .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
 
         System.out.println("Média: " + est.getAverage());
