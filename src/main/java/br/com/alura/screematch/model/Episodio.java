@@ -15,6 +15,7 @@ public class Episodio {
         this.titulo = dadosEpisodio.titulo();
         this.numero = dadosEpisodio.numero();
 
+
         try {
             this.avaliacao = Double.valueOf(dadosEpisodio.avaliacao());
 

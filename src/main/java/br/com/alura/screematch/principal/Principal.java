@@ -16,7 +16,7 @@ public class Principal {
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=6585022c";
 
-    private ConsumoAPI consumoAPI= new ConsumoAPI();
+    private ConsumoAPI consumoAPI = new ConsumoAPI();
 
     private ConverteDados conversor = new ConverteDados();
 
@@ -24,8 +24,8 @@ public class Principal {
         System.out.println("Digite o nome da série que você deseja buscar: ");
         var nomeSerie = leitura.nextLine();
         var json = consumoAPI.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-           DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-           System.out.println(dados);
+        DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
+        System.out.println(dados);
 
         List<DadosTemporada> temporadas = new ArrayList<>();
 
@@ -60,7 +60,6 @@ public class Principal {
                 .peek(e -> System.out.println("Limite: " + e ))
                 .map(e -> e.titulo().toUpperCase())
                 .peek(e -> System.out.println("Mapeamento: " + e ))
-
                 .forEach(System.out::println);
 
         List<Episodio> episodios = temporadas.stream()
@@ -102,7 +101,7 @@ public class Principal {
                 .collect(Collectors.groupingBy(Episodio::getTemporada,
                         Collectors.averagingDouble(Episodio::getAvaliacao)));
 
-        System.out.println(avaliacaoTemporada);
+        System.out.println("Avaliação por temporada: " + avaliacaoTemporada);
 
         DoubleSummaryStatistics est = episodios.stream()
                 .filter(e -> e.getAvaliacao() > 0.0)
